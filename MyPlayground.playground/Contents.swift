@@ -19,12 +19,12 @@ class BankAccount {
         get {
             return accountBalance - fees
         }
-        set (newBalance) {
-            accountBalance = newBalance - fees
+        set (accountBalance) {
+            self.accountBalance = accountBalance - fees
         }
     }
-    
-    lazy var myProperty: String = {
+        
+        lazy var myProperty: String = {
         // 오래걸리는 작업
         // var result = resourceIntensiveTask()
         //  result = processData(data: result)
