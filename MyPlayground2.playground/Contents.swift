@@ -23,3 +23,24 @@ class MyClass: MessageBulider {
         return "Hello" + name
     }
 }
+
+// 제네릭처럼 반환타입을 구현하고 싶을 때 some을 사용
+func doubleFun1 (value: Int) -> some Equatable {
+    return value * 2
+}
+
+// 이 프로토콜만 지키면 반환타입을 받을 수 있다 라고 이해해도 됨.
+func doubleFun2 (value: String) -> some Equatable {
+    value + value
+}
+
+let intOne = doubleFun1(value: 10)
+print(intOne)
+
+let stringOne = doubleFun2(value: "Hello")
+print(stringOne)
+
+// 동작하지 않는다.
+//if (intOne == stringOne) {
+//    print("They match")
+//}
