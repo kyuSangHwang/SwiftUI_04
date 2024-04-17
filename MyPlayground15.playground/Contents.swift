@@ -8,8 +8,7 @@ enum FileTransferError: Error {
     case fileNotFound
 }
 
-func transferFile() throws {
-    
+func fileTransfer() throws {
     guard connectionOK else {
         throw FileTransferError.noConnection
     }
@@ -28,17 +27,13 @@ func sendFile() -> String {
     do {
         try fileTransfer()
     } catch FileTransferError.noConnection {
-        return("No Network Connection")
+        return "No Connection"
     } catch FileTransferError.lowBandwidth {
-        return("File Transfer Speed too Low")
+        return "Speed too low"
     } catch FileTransferError.fileNotFound {
-        return("File not Found")
+        return "File Not Found"
     } catch {
-        return("Unknown error")
+        return "Unknown error"
     }
-    return("Successful transfer")
-}
-
-func fileTransfer() throws {
-    
+    return "Successful transfer"
 }
