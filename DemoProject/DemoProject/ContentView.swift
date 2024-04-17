@@ -8,21 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var fileopen: Bool = true
-    
     var body: some View {
-        var myString: String = "File closed"
-        
-        if(fileopen) {
-            myString = "File open"
+        VStack {
+            Text("Text 1")
+            Text("Text 2")
+            MyHStackView()
         }
-        
-        return VStack {
-            HStack {
-                Text(myString)
-                    .padding()
-                Text("Goodbye, world")
-            }
+    }
+}
+
+struct MyHStackView: View {
+    var body: some View {
+        HStack {
+            Text("Text 3")
+            Text("Text 4")
         }
     }
 }
