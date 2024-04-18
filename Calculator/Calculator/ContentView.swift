@@ -49,17 +49,72 @@ struct ContentView: View {
         
         switch button {
         case "=":
-            print("Calculate!")
+            claculate()
         case "C":
             inputValue = "0"
         case "+", "-", "*", "/":
-            if (["+", "-", "*", "/"]).contains(inputValue.suffix(1)) {
+            if (["+", "-", "*", "/"]).contains(inputValue.suffix(1)) { // 앞에 있는 배열에 있는게 포함되어 있으면 지워라
                 inputValue.removeLast()
             }
             inputValue += button
         default:
             inputValue += button
         }
+    }
+    
+    func claculate() {
+        let operators: [Character] = ["+", "-", "*", "/"]
+        if operators.contains(inputValue.suffix(1)) { // 같은 표현 operators.contains(String(inputValue.last!))
+            inputValue = "Invalid Input"
+            return
+        }
+        
+        var numbers = [Double]()
+        var currentNumber = ""
+        var currentOperator = "+"
+        
+        for char in inputValue {
+            print("-------")
+            print(char)
+            if operators.contains(char) {
+                if let number = Double(currentNumber) {
+                    switch currentOperator {
+                    case "+":
+                        numbers.append(number)
+                    case "-":
+                        numbers.append(-number)
+                    case "*":
+                        numbers[numbers.count - 1] *= number
+                    case "/":
+                        numbers[numbers.count - 1] /= number
+                    default:
+                        break
+                    }
+                    
+                    currentNumber = ""
+                    currentOperator = String(char)
+                }
+            } else {
+                currentNumber += String(char)
+            }
+        }
+        if !currentNumber.isEmpty {
+            if let number = Double(currentNumber) {
+                switch currentOperator {
+                case "+":
+                    numbers.append(number)
+                case "-":
+                    numbers.append(-number)
+                case "*":
+                    numbers[numbers.count - 1] *= number
+                case "/":
+                    numbers[numbers.count - 1] /= number
+                default:
+                    break
+                }
+            }
+        }
+        inputValue = String(numbers.reduce(0,+))
     }
 }
 
