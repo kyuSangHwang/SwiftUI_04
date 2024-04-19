@@ -20,20 +20,22 @@ struct ContentView: View {
     
     func doSomething() {
         print("Start \(Date())")
-        let parentIndex: Int = 3
-        let detachedTask = Task.detached {
-//            let result = await takesTooLong()
-//            print("\(result)")
-            async let result = takesTooLong(index: parentIndex)
-            print("\(await result)")
+        let task = Task(priority: .background) {
+            let result = await takesTooLong()
+            print("Date result: \(result)")
         }
-        print(detachedTask)
+        print(task.isCancelled)
+        if !task.isCancelled {
+            task.cancel()
+        }
+        print(task.isCancelled)
         print("End \(Date())")
     }
     
-    func takesTooLong(index: Int) async -> Date {
+    func takesTooLong() async -> Date {
+        print("tasksTooLong start \(Task.currentPriority)")
         sleep(5)
-        print("Async task completed at \(index)")
+        print("tasksTooLong ")
         return Date()
     }
 }
