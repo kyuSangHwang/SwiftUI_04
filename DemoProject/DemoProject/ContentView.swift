@@ -20,16 +20,20 @@ struct ContentView: View {
     
     func doSomething() {
         print("Start \(Date())")
-        Task {
-           async let result = takesTooLong()
+        let parentIndex: Int = 3
+        let detachedTask = Task.detached {
+//            let result = await takesTooLong()
+//            print("\(result)")
+            async let result = takesTooLong(index: parentIndex)
             print("\(await result)")
         }
+        print(detachedTask)
         print("End \(Date())")
     }
     
-    func takesTooLong() async -> Date {
+    func takesTooLong(index: Int) async -> Date {
         sleep(5)
-        print("Async task completed at \(Date())")
+        print("Async task completed at \(index)")
         return Date()
     }
 }
