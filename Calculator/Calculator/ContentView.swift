@@ -63,58 +63,13 @@ struct ContentView: View {
     }
     
     func claculate() {
-        let operators: [Character] = ["+", "-", "*", "/"]
-        if operators.contains(inputValue.suffix(1)) { // 같은 표현 operators.contains(String(inputValue.last!))
-            inputValue = "Invalid Input"
-            return
-        }
+        let expression = NSExpression(format: inputValue)
         
-        var numbers = [Double]()
-        var currentNumber = ""
-        var currentOperator = "+"
-        
-        for char in inputValue {
-            print("-------")
-            print(char)
-            if operators.contains(char) {
-                if let number = Double(currentNumber) {
-                    switch currentOperator {
-                    case "+":
-                        numbers.append(number)
-                    case "-":
-                        numbers.append(-number)
-                    case "*":
-                        numbers[numbers.count - 1] *= number
-                    case "/":
-                        numbers[numbers.count - 1] /= number
-                    default:
-                        break
-                    }
-                    
-                    currentNumber = ""
-                    currentOperator = String(char)
-                }
-            } else {
-                currentNumber += String(char)
-            }
+        if let value = expression.expressionValue(with: nil, context: nil) as? Double {
+            inputValue = String(value)
+        } else {
+            inputValue = "Invalid input"
         }
-        if !currentNumber.isEmpty {
-            if let number = Double(currentNumber) {
-                switch currentOperator {
-                case "+":
-                    numbers.append(number)
-                case "-":
-                    numbers.append(-number)
-                case "*":
-                    numbers[numbers.count - 1] *= number
-                case "/":
-                    numbers[numbers.count - 1] /= number
-                default:
-                    break
-                }
-            }
-        }
-        inputValue = String(numbers.reduce(0,+))
     }
 }
 
