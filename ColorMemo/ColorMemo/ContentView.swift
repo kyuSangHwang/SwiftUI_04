@@ -6,14 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
     @State var showSheet = false
-    @ObservedObject var memoStore = MemoStore()
-    
+    @Environment(\.modelContext) var modelContext
+    @Query var memos: [Memo]
+
     var body: some View {
         NavigationStack {
-            List (memoStore.memos) { memo in
+            List (memos) { memo in
                 HStack {
                     VStack(alignment: .leading) {
                         Text("\(memo.text)")
@@ -27,13 +29,12 @@ struct ContentView: View {
                     }
                     .padding()
                     .foregroundColor(.white)
-                    .background(memo.color)
                     .shadow(radius: 3)
                     .padding()
                     .contextMenu {
                         ShareLink(item: memo.text)
                         Button {
-                            memoStore.removeMemo(memo)
+                            modelContext.delete(memo)
                         } label: {
                             Image(systemName: "trash")
                             Text("삭제")
@@ -58,13 +59,12 @@ struct ContentView: View {
                 MemoAddView(showSheet: $showSheet)
             }
         }
-        .environmentObject(memoStore)
     }
 }
 
 struct MemoAddView: View {
-    @EnvironmentObject var memoStore: MemoStore
-    
+    @Environment(\.modelContext) var modelContext
+
     @Binding var showSheet: Bool
     @State var memoColor: Color = .blue
     @State var memoText: String = ""
@@ -79,7 +79,7 @@ struct MemoAddView: View {
                 }
                 Spacer()
                 Button("완료") {
-                    memoStore.addMemo(memoText, color: memoColor)
+                    addMemo(memoText/*, color: memoColor*/)
                     showSheet = false
                 }
                 .disabled(memoText.isEmpty)
@@ -123,8 +123,16 @@ struct MemoAddView: View {
             Spacer()
         }
     }
+    
+    func addMemo(_ text: String) {
+        let memo = Memo(text: text)
+        modelContext.insert(memo)
+    }
+    
+
 }
 
 #Preview {
     ContentView()
+        .modelContainer(for: Memo.self)
 }
