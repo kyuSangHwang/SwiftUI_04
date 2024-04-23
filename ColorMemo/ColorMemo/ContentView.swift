@@ -134,5 +134,5 @@ struct MemoAddView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Memo.self)
+        .modelContainer(for: Memo.self, inMemory: true)
 }
